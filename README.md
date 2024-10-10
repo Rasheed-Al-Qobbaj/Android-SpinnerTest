@@ -2,7 +2,7 @@
 
 This is a simple Android application demonstrating the use of the Spinner widget. This project is part of a mobile development course at university.
 
-[SpinnerTest.png](SpinnerTest.png)
+![Screenshot of the app](SpinnerTest.png)
 
 ## Features
 
