@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner spinner;
 
-    TextView textView;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,36 +36,56 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        Topic cpp = new Topic("C++", new ArrayList<>(Arrays.asList("C++ Programming", "C++ Programming Cookbook", "C++ Programming for Beginners", "C++ Programming for Dummies")));
-        Topic java = new Topic("Java", new ArrayList<>(Arrays.asList("Java Programming", "Java Programming Cookbook", "Java Programming for Beginners", "Java Programming for Dummies")));
-        Topic python = new Topic("Python", new ArrayList<>(Arrays.asList("Python Programming", "Python Programming Cookbook", "Python Programming for Beginners", "Python Programming for Dummies")));
-        Topic[] topics = {cpp, java, python};
+        ArrayList<Brands> brands = initBrands();
 
         // Inject topics into spinner
         spinner = findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        for (Topic topic : topics) {
-            adapter.add(topic.getName());
+        for (Brands brand : brands) {
+            adapter.add(brand.getName());
         }
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         button = findViewById(R.id.button);
-        textView = findViewById(R.id.textView);
+        listView = findViewById(R.id.listView);
         button.setOnClickListener(v -> {
             String text = spinner.getSelectedItem().toString();
-            String books = "";
-            // Get books for selected topic
-            for (Topic topic : topics) {
-                if (topic.getName().equals(text)) {
-                    // Join books with newline
-                    books = String.join("\n", topic.getBookList());
-                    break;
+            for (Brands brand : brands) {
+                if (brand.getName().equals(text)) {
+                    ArrayAdapter<Glasses> glassesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, brand.getGlasses());
+                    listView.setAdapter(glassesAdapter);
                 }
             }
-            textView.setText(books);
         });
     }
 
+    public ArrayList<Brands> initBrands() {
+        ArrayList<Glasses> rayBanGlasses = new ArrayList<>(Arrays.asList(
+            new Glasses("Ray-Ban Aviator", 150.0),
+            new Glasses("Ray-Ban Wayfarer", 120.0),
+            new Glasses("Ray-Ban Clubmaster", 130.0)
+        ));
+
+        ArrayList<Glasses> oakleyGlasses = new ArrayList<>(Arrays.asList(
+            new Glasses("Oakley Holbrook", 160.0),
+            new Glasses("Oakley Frogskins", 140.0),
+            new Glasses("Oakley Sutro", 180.0)
+        ));
+
+        ArrayList<Glasses> gucciGlasses = new ArrayList<>(Arrays.asList(
+            new Glasses("Gucci GG0061S", 300.0),
+            new Glasses("Gucci GG0113S", 320.0),
+            new Glasses("Gucci GG0062S", 310.0)
+        ));
+
+        ArrayList<Brands> brands = new ArrayList<>(Arrays.asList(
+            new Brands("Ray-Ban", rayBanGlasses),
+            new Brands("Oakley", oakleyGlasses),
+            new Brands("Gucci", gucciGlasses)
+        ));
+
+        return brands;
+    }
 
 }
